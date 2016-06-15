@@ -1,4 +1,4 @@
-$def with (switch, flows)
+$def with (switch)
 
 <html lang="en">
 <head>
@@ -6,13 +6,14 @@ $def with (switch, flows)
     <title>863-sdn</title>
     <meta name="description" content="863-sdn">
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
     <style>
         html {height: 100%}
         body {width: 100%; height: 100%}
         .banner {height: 7%; background-color: #337AB7; margin: 2px; margin-bottom: 5px;}
         .banner-text {color: white; font-weight: bold; font-size: 33px;}
-        .tab-container {float:left; width: 20%; border-style: groove; height: 90%;}
-        .tab-content {float: left; width: 79%; border-style: groove; margin-left: 10px; height: 90%; }
+        .parent-container {float:left; width: 20%; border-style: groove; height: 90%;}
+        .parent-content {float: left; width: 79%; border-style: groove; margin-left: 10px; height: 90%; }
         .bold {font-weight: bold;}
     </style>
 </head>
@@ -24,7 +25,7 @@ $def with (switch, flows)
 	</div>
 
   	<!-- Nav tabs -->
-	<div class="tab-container">
+	<div class="tab-container parent-container">
 	  <ul class="nav nav-pills nav-stacked">
 	    <li><a href="#home"><span class="bold">网络资源感知</span></a></li>
 	    <li><a href="#switch-info" data-toggle="tab">Switch-Info</a></li>
@@ -38,9 +39,9 @@ $def with (switch, flows)
 	  </ul>
 	</div>
 
-	<div class="tab-content">
+	<div class="tab-content parent-content">
 	    <div class="tab-pane active" id="switch-info">
-            $flows
+            $switch
 
 	    </div>
 	    <div class="tab-pane" id="host-info">
@@ -56,12 +57,335 @@ $def with (switch, flows)
 
 	    </div>
 	    <div class="tab-pane" id="messages">3</div>
-	    <div class="tab-pane" id="settings">4</div>
+	    <div class="tab-pane" id="settings">
+			<p>ODL防火墙设置</p>
+			<div class="tab-container">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#add-rule" data-toggle="tab">添加规则</a></li>
+					<li><a href="#check-rule" data-toggle="tab">查看规则</a></li>
+					<li><a href="#delete-rule" data-toggle="tab">删除规则</a></li>
+					<li><a href="#modify-rule" data-toggle="tab">修改规则</a></li>
+				</ul>
+			</div>
+			<div class="tab-content">
+
+				<!-- 添加规则 -->
+				<div class="tab-pane active" id="add-rule">
+					<div style="width: 50%; margin: 0px auto; margin-top: 30px">
+						<form class="form-horizontal extra-form-horizontal" role="form">
+							<div class="form-group">
+								<label for="inport" class="col-sm-2 control-label">入端口</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="inport"
+										placeholder="请输入入端口">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="protocol" class="col-sm-2 control-label">协议</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="protocol"
+										placeholder="请输入协议">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="mac_dst" class="col-sm-2 control-label">目的MAC</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="mac_dst"
+										placeholder="请输入MAC地址">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="ip_src" class="col-sm-2 control-label">源IP</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="ip_src"
+										placeholder="0.0.0.0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="port_src" class="col-sm-2 control-label">源端口</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="port_src"
+										placeholder="请输入源端口">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="ip_dst" class="col-sm-2 control-label">目的IP</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="ip_dst"
+										placeholder="0.0.0.0">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="port_dst" class="col-sm-2 control-label">目的端口</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="port_dst"
+										placeholder="请输入目的端口">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="actions" class="col-sm-2 control-label">动作</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="actions"
+										placeholder="Accept/Drop/Controller">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="priority" class="col-sm-2 control-label">优先级</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="priority"
+										placeholder="请输入优先级">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<button type="submit" class="btn btn-primary"
+										style="float: right">添加</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- 查看规则 -->
+				<div class="tab-pane" id="check-rule">
+					<div style="width: 93%; margin-left: 20px">
+						<table class="table table-striped" id="checkruletable">
+							<caption>已有防火墙规则</caption>
+							<thead>
+								<tr>
+									<th>序号</th>
+									<th>入端口</th>
+									<th>协议</th>
+									<th>目的MAC</th>
+									<th>源IP</th>
+									<th>源端口</th>
+									<th>目的IP</th>
+									<th>目的端口</th>
+									<th>动作</th>
+									<th>优先级</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>1</td>
+									<td>1</td>
+									<td>TCP</td>
+									<td>98-90-96-C6-FF-61</td>
+									<td>10.10.88.150</td>
+									<td>6633</td>
+									<td>10.10.88.2</td>
+									<td>22</td>
+									<td>Accept</td>
+									<td>6</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>1</td>
+									<td>IP</td>
+									<td>98-90-96-C6-FF-61</td>
+									<td>10.10.88.2</td>
+									<td>22</td>
+									<td>10.10.88.150</td>
+									<td>6633</td>
+									<td>Deny</td>
+									<td>6</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td>1</td>
+									<td>FTP</td>
+									<td>98-90-96-C6-FF-61</td>
+									<td>10.10.88.150</td>
+									<td>6633</td>
+									<td>10.10.88.2</td>
+									<td>22</td>
+									<td>Accept</td>
+									<td>6</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>Controller</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- 删除规则 -->
+				<div class="tab-pane" id="delete-rule">
+					<div style="width: 93%; margin-left: 20px">
+						<table class="table table-striped">
+							<caption>已有防火墙规则</caption>
+							<thead>
+								<tr>
+									<th>选项</th>
+									<th>序号</th>
+									<th>入端口</th>
+									<th>协议</th>
+									<th>目的MAC</th>
+									<th>源IP</th>
+									<th>源端口</th>
+									<th>目的IP</th>
+									<th>目的端口</th>
+									<th>动作</th>
+									<th>优先级</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><div class="checkbox">
+											<label> <input type="checkbox">
+											</label>
+										</div></td>
+									<td>1</td>
+									<td>1</td>
+									<td>TCP</td>
+									<td>98-90-96-C6-FF-61</td>
+									<td>10.10.88.150</td>
+									<td>6633</td>
+									<td>10.10.88.2</td>
+									<td>22</td>
+									<td>Accept</td>
+									<td>6</td>
+								</tr>
+								<tr>
+									<td><div class="checkbox">
+											<label> <input type="checkbox">
+											</label>
+										</div></td>
+									<td>2</td>
+									<td>1</td>
+									<td>IP</td>
+									<td>98-90-96-C6-FF-61</td>
+									<td>10.10.88.2</td>
+									<td>22</td>
+									<td>10.10.88.150</td>
+									<td>6633</td>
+									<td>Deny</td>
+									<td>6</td>
+								</tr>
+								<tr>
+									<td><div class="checkbox">
+											<label> <input type="checkbox">
+											</label>
+										</div></td>
+									<td>3</td>
+									<td>1</td>
+									<td>FTP</td>
+									<td>98-90-96-C6-FF-61</td>
+									<td>10.10.88.150</td>
+									<td>6633</td>
+									<td>10.10.88.2</td>
+									<td>22</td>
+									<td>Accept</td>
+									<td>6</td>
+								</tr>
+								<tr>
+									<td><div class="checkbox">
+											<label> <input type="checkbox">
+											</label>
+										</div></td>
+									<td>4</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>*</td>
+									<td>Controller</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td><div class="checkbox">
+											<label> <input type="checkbox">
+											</label>
+										</div></td>
+									<td>5</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="submit" class="btn btn-primary"
+								style="float: right">删除</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- 修改规则 -->
+				<div class="tab-pane" id="modify-rule">4</div>
+			</div>
+		</div>
   	</div>
 
 </body>
 
 <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
 
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	$('#checkruletable').dataTable( {
+		"processing": true,"serverSide": true,
+		'ajax': {
+		    "url": "${pageContext.request.contextPath}/igc/reports/all.json",
+		    "type": "POST",
+		    "data": DSS.dt.buildAjaxDataWithCriteria('.panel-criteria')
+		  },
+        "columns": [
+                    { "title": "序号","data":"ID","width":"3em" }
+                    ,{ "title": "表名","data":"REPORT_NAME",
+                    	"render": function ( data, type, full) { return '<a href="report/'+full.ID+'/"/>'+data+'</a>';}
+                    }
+                    ,{ "title": "表号","data":"REPORT_NUMBER" }
+                    ,{ "title": "类型","data":"REPORT_TYPE","render": DSS.dt.ReportTypeRender}
+                    ,{ "title": "部门","data":"REPORT_ORGAN" }
+                   // ,{ "title": "到期时间","data":"DEADTIME" }
+                    ,{ "title": "创建时间","data":"CREATE_TIME","render": DSS.dt.DateRender}
+                    ,{ "title": "操作","data":null,
+                    	"defaultContent": "<button class='dist btn btn-default btn-sm'><span class='glyphicon glyphicon-save'></span>下发</button>"
+                    }
+                  ],
+
+        "language": DT_LANG,
+		"paging": true, "lengthMenu": [ 10, 20, 50, 100],"pageLength": 10,
+		"searching": true,
+		"ordering": true
+    });
+
+</script>
 </html>
