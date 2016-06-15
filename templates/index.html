@@ -1,0 +1,67 @@
+$def with (switch)
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>863-sdn</title>
+    <meta name="description" content="863-sdn">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <style>
+        html {height: 100%}
+        body {width: 100%; height: 100%}
+        .banner {height: 7%; background-color: #337AB7; margin: 2px; margin-bottom: 5px;}
+        .banner-text {color: white; font-weight: bold; font-size: 33px;}
+        .tab-container {float:left; width: 20%; border-style: groove; height: 90%;}
+        .tab-content {float: left; width: 79%; border-style: groove; margin-left: 10px; height: 90%; }
+        .bold {font-weight: bold;}
+    </style>
+</head>
+<body>
+
+    <!-- Banner -->
+	<div class="banner">
+		<p class="banner-text">SDN控制台</p>
+	</div>
+
+  	<!-- Nav tabs -->
+	<div class="tab-container">
+	  <ul class="nav nav-pills nav-stacked">
+	    <li><a href="#home"><span class="bold">网络资源感知</span></a></li>
+	    <li><a href="#switch-info" data-toggle="tab">Switch-Info</a></li>
+	    <li><a href="#host-info" data-toggle="tab">Host-Info</a></li>
+	    <li><a href="#link-info" data-toggle="tab">Link-Info</a></li>
+	    <li><a href="#profile" data-toggle="tab">Flows</a></li>
+
+	    <li><a href="#profile" data-toggle="tab"><span class="bold">路径选择</span></a></li>
+	    <li><a href="#messages" data-toggle="tab"><span class="bold">带宽预留</span></a></li>
+	    <li><a href="#settings" data-toggle="tab"><span class="bold">安全策略</span></a></li>
+	  </ul>
+	</div>
+
+	<div class="tab-content">
+	    <div class="tab-pane active" id="switch-info">
+            $switch
+
+	    </div>
+	    <div class="tab-pane" id="host-info">
+	    	host node-id: host:f4:e9:d4:8d:f3:00<br>
+	    	host MAC ADDR: f4:e9:d4:8d:f3:00<br>
+	    	host IP ADDR: 192.168.11.171<br>
+	    	connected to: port 7<br><br>
+
+	    	host node-id: host:f4:e9:d4:8c:e2:a0<br>
+	    	host MAC ADDR: f4:e9:d4:8c:e2:a0<br>
+	    	host IP ADDR: 192.168.11.173<br>
+	    	connected to: port 9<br>
+
+	    </div>
+	    <div class="tab-pane" id="messages">3</div>
+	    <div class="tab-pane" id="settings">4</div>
+  	</div>
+
+</body>
+
+<script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</html>
