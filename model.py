@@ -27,7 +27,7 @@ def get_switch():
     id = node_info['id']
     dscrption = node_info['flow-node-inventory:description']
     hardware = node_info['flow-node-inventory:hardware']
-    ports = node_info['node-connector'][0]['flow-node-inventory:port-number']
+    ports = node_info['node-connector'][1]['flow-node-inventory:port-number']
     return ports
 
 def get_host():
