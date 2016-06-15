@@ -19,8 +19,9 @@ class Index:
     def GET(self):
         """ Show page """
         switch = model.get_switch()
+        flows = model.get_flows()
         #form = self.form()
-        return render.index(switch)
+        return render.index(switch, flows)
 
     def POST(self):
         """ Add new entry """
